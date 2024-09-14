@@ -1,0 +1,46 @@
+Intellij
+	SonarLint
+
+Postgres:
+	docker run --name mysupproject_db -e POSTGRES_PASSWORD=admin -p 5432:5432 -d postgres
+	docker exec -it mysupproject_db bash
+	su postgres
+	psql -c "CREATE USER msp376340 WITH PASSWORD 'Yo73o=7pFo=n'"
+	psql -c "CREATE DATABASE job_offers OWNER msp376340" postgres
+	-> Todo create Docker & change root user
+	
+Projet job-offers-service http://localhost:7301/
+	Spring Boot DevTools
+	Lombok
+	Spring Web Web
+	Spring Security
+	Spring Data JPA
+	Flyway Migration
+	PostgreSQL Driver
+	Spring for RabbitMQ
+	Spring Boot Actuator 
+	Prometheus
+	Eureka Discovery Client
+	
+	=> https://medium.com/@faroukymedia/de-la-th%C3%A9orie-%C3%A0-la-pratique-spring-boot-architecture-hexagonale-et-ddd-pour-des-applications-f1110d83bced
+	=> https://spring.academy/guides/microservices-observability-reactive-spring-boot-3
+	=> https://medium.com/javarevisited/spring-boot-authorization-creating-an-authorization-server-for-your-microservices-50a3aefd6ce8
+
+Projet Discovery Service: http://localhost:7300/
+	Eureka Server
+
+Spring cloud Gateway
+	Gateway
+	Eureka Discovery Client
+	
+authorization-server: partie authentication
+	OAuth2 Authorization Server
+	
+	
+
+prometheus
+grafana
+
+
+Later:
+	Resilience4J 
