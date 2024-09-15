@@ -27,3 +27,6 @@ public class JobOfferInPort implements JobOfferUseCase {
         return jobOfferOutPort.create(jobOffer);
     }
 }
+
+
+

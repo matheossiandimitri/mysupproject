@@ -32,13 +32,22 @@ Projet Discovery Service: http://localhost:7300/
 
 Spring cloud Gateway
 	Gateway
+	Actuator
 	Eureka Discovery Client
-	resilience4j
-	security
+	Resilience4j
+	Security
+	
+	=> https://progen.medium.com/load-balancing-spring-cloud-applications-using-eureka-and-spring-cloud-gateway-43d0bcf57cc3
 	
 authorization-server: partie authentication
 	OAuth2 Authorization Server
+	Actuator
 	
+	
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-actuator</artifactId>
+  </dependency>
 	
 
 prometheus

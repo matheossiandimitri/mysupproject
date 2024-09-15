@@ -7,7 +7,6 @@ import com.dim.job_offers_service.domain.model.CriteriaForFinder;
 import com.dim.job_offers_service.domain.model.JobOffer;
 import com.dim.job_offers_service.domain.model.JobOffers;
 import com.dim.job_offers_service.domain.ports.out.JobOfferOutPort;
-import com.dim.job_offers_service.domain.usecases.JobOfferUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
