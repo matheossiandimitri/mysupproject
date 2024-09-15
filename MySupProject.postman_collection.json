@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "0d1d7577-b1d3-4bd1-81c2-9c3abadcf379",
+		"name": "MySupProject",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7802493"
+	},
+	"item": [
+		{
+			"name": "job-offers-service",
+			"item": [
+				{
+					"name": "find jobOffers with criteria",
+					"request": {
+						"auth": {
+							"type": "basic"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7303/job-offers?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7303",
+							"path": [
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create JobOffer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\":\"WAITING_INFORMATION\",\r\n    \"jobOfferProvider\": \"unknow\",\r\n    \"endCustomer\":\"famousOne\",\r\n    \"title\": \"fullstack Spring boot Angular\",\r\n    \"description\": \"my description\",\r\n    \"lastUpdateDate\": \"2024-09-14T11:59:11.332Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7303/job-offers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7303",
+							"path": [
+								"job-offers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gateway",
+			"item": [
+				{
+					"name": "Find jobOffers with criteria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:7302/job-offers-service/job-offers?page=0&size=10",
+							"host": [
+								"localhost"
+							],
+							"port": "7302",
+							"path": [
+								"job-offers-service",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create JobOffer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\":\"WAITING_INFORMATION\",\r\n    \"jobOfferProvider\": \"unknow\",\r\n    \"endCustomer\":\"famousOne\",\r\n    \"title\": \"fullstack Spring boot Angular\",\r\n    \"description\": \"my description\",\r\n    \"lastUpdateDate\": \"2024-09-14T11:59:11.332Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7302/job-offers-service/job-offers",
+							"host": [
+								"localhost"
+							],
+							"port": "7302",
+							"path": [
+								"job-offers-service",
+								"job-offers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

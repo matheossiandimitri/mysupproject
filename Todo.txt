@@ -11,6 +11,7 @@ Postgres:
 	
 Projet job-offers-service http://localhost:7301/
 	Spring Boot DevTools
+	Actuator
 	Lombok
 	Spring Web Web
 	Spring Security
@@ -32,6 +33,8 @@ Projet Discovery Service: http://localhost:7300/
 Spring cloud Gateway
 	Gateway
 	Eureka Discovery Client
+	resilience4j
+	security
 	
 authorization-server: partie authentication
 	OAuth2 Authorization Server
