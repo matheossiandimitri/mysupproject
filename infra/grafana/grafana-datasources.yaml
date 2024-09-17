@@ -1,0 +1,54 @@
+# Add data sources instead of doing it manually via UI
+# https://github.com/grafana/tempo/blob/main/example/docker-compose/shared/grafana-datasources.yaml
+# https://github.com/ashenwgt/springboot-observability-grafana-prometheus-tempo-loki/blob/develop/docker/grafana/datasource.yml
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    editable: false
+    jsonData:
+      httpMethod: POST
+      # Link loki logs with tempo
+      exemplarTraceIdDestinations:
+        - name: traceId
+          datasourceUid: tempo
+  - name: Tempo
+    type: tempo
+    access: proxy
+    orgId: 1
+    url: http://tempo:3200
+    basicAuth: false
+    isDefault: true
+    version: 1
+    editable: false
+    apiVersion: 1
+    uid: tempo
+    # Add link to logs
+    jsonData:
+      httpMethod: GET
+      tracesToLogs:
+        datasourceUid: 'loki'
+      nodeGraph:
+        enabled: true
+  - name: Loki
+    type: loki
+    uid: loki
+    access: proxy
+    orgId: 1
+    url: http://loki:3100
+    basicAuth: false
+    isDefault: false
+    version: 1
+    editable: false
+    apiVersion: 1
+    jsonData:
+      # Add "Tempo" button to link to Tempo's trace
+      derivedFields:
+        -   datasourceUid: tempo
+            # Based on [service-name,traceId,spanId]
+            matcherRegex: \[.+,(.+?),
+            name: traceId
+            url: $${__value.raw}

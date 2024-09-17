@@ -6,6 +6,7 @@ import com.dim.job_offers_service.domain.model.JobOffers;
 import com.dim.job_offers_service.domain.ports.out.JobOfferOutPort;
 import com.dim.job_offers_service.domain.usecases.JobOfferUseCase;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,17 +14,20 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @AllArgsConstructor
+@Slf4j
 public class JobOfferInPort implements JobOfferUseCase {
 
     private JobOfferOutPort jobOfferOutPort;
 
     @Override
     public JobOffers findWithCriteria(CriteriaForFinder criteriaForFinder) {
+        log.info("GET Endpoint called !!");
         return jobOfferOutPort.findWithCriteria(criteriaForFinder);
     }
 
     @Override
     public JobOffer create(JobOffer jobOffer) {
+        log.info("POST Endpoint called !!");
         return jobOfferOutPort.create(jobOffer);
     }
 }

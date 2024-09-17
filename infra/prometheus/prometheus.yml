@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:      
+  # scap himself (disabled for my tests)
+#  - job_name: "prometheus"
+#    static_configs:
+#      - targets: ['prometheus:9090']
+  - job_name: 'job-offers-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:7010'] # use host.docker.internal when service is running outside docker (for demo only)
+  - job_name: 'contact-book-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:7050'] # use host.docker.internal when service is running outside docker (for demo only)

@@ -1,58 +1,62 @@
-Intellij
-	SonarLint
+TODO
+	Resilience4J
+	security
+	keyvault + helm
+	SonarQube
 
-Postgres:
-	docker run --name mysupproject_db -e POSTGRES_PASSWORD=admin -p 5432:5432 -d postgres
-	docker exec -it mysupproject_db bash
-	su postgres
-	psql -c "CREATE USER msp376340 WITH PASSWORD 'Yo73o=7pFo=n'"
-	psql -c "CREATE DATABASE job_offers OWNER msp376340" postgres
-	-> Todo create Docker & change root user
-	
-Projet job-offers-service http://localhost:7301/
-	Spring Boot DevTools
-	Actuator
-	Lombok
-	Spring Web Web
-	Spring Security
-	Spring Data JPA
-	Flyway Migration
-	PostgreSQL Driver
-	Spring for RabbitMQ
-	Spring Boot Actuator 
-	Prometheus
-	Eureka Discovery Client
-	
+Projet job-offers-service http://localhost:7010/
 	=> https://medium.com/@faroukymedia/de-la-th%C3%A9orie-%C3%A0-la-pratique-spring-boot-architecture-hexagonale-et-ddd-pour-des-applications-f1110d83bced
-	=> https://spring.academy/guides/microservices-observability-reactive-spring-boot-3
 	=> https://medium.com/javarevisited/spring-boot-authorization-creating-an-authorization-server-for-your-microservices-50a3aefd6ce8
 
-Projet Discovery Service: http://localhost:7300/
-	Eureka Server
+Projet Eureka Server - Discovery Service: http://localhost:7300/
 
-Spring cloud Gateway
-	Gateway
-	Actuator
-	Eureka Discovery Client
-	Resilience4j
-	Security
-	
+Spring cloud Gateway: http://localhost:7302/
 	=> https://progen.medium.com/load-balancing-spring-cloud-applications-using-eureka-and-spring-cloud-gateway-43d0bcf57cc3
+	=> https://mominjahid.medium.com/spring-cloud-gateway-spring-boot-3-0-load-balancing-46a5cbb9798f
 	
 authorization-server: partie authentication
-	OAuth2 Authorization Server
-	Actuator
-	
-	
-  <dependency>
-   <groupId>org.springframework.boot</groupId>
-   <artifactId>spring-boot-starter-actuator</artifactId>
-  </dependency>
-	
 
-prometheus
-grafana
+Metrics & tracing =============>	
+
+Version 1: https://medium.com/@ahmadalammar/comprehensive-observability-in-spring-boot-using-opentelemetry-prometheus-grafana-tempo-and-e08842ae96be
+	Spring boot: http://localhost:7010/actuator/prometheus
+		=> OTEL: http://localhost:8889/ => Prometheus: http://localhost:9090
+		=> OTEL: http://localhost:8889/ => Loki
+		=> OTEL: http://localhost:8889/ => Tempo
+
+Version 2: https://github.com/ashenwgt/springboot-observability-grafana-prometheus-tempo-loki
+	Spring boot: 
+		Expose http://localhost:7010/actuator/prometheus  <= Prometheus scrap data: http://localhost:9090 
+		loki-logback-appender sends logs to => Loki: http://loki:3100/loki/api/v1/push
+		zipkin-reporter-brave sends traces to =KO doesn't work=> Tempo: http://localhost:3200/
+		
+In both version Grafana is connected to 3 datasources:
+	- Prometheus: http://localhost:9090 
+	- Loki: http://localhost:3200/
+	- Tempo: http://localhost:3100/
 
 
-Later:
-	Resilience4J 
+OpenTelemetry:
+	- observability framework
+	- collect distributed traces & metrics
+	- When to scale ? https://opentelemetry.io/docs/collector/scaling/
+		 "looking at the metrics otelcol_exporter_queue_size and otelcol_exporter_queue_capacity"
+	- otel-collector when running (via docker compose) without service
+
+Prometheus: http://localhost:9090/
+	- time-series database for metrics and a robust querying tool
+	- 1 server can handle million of time-series, enough for 1000 servers
+	- https://www.robustperception.io/scaling-and-federating-prometheus/?ref=blog.ippon.fr
+	
+Grafana: http://localhost:3000 admin/admin (first login) -> admin/root
+	Grafana offer customizable dashboards to monitor different metrics
+
+Alerting ? Prometheus or Grafana ?
+
+Grafana Tempo:
+	- Tracing backend => where the request goes, from client to db or other services
+	- works with OpenTelemetry
+
+Grafana Loki :
+	Log aggregation system
+	https://grafana.com/oss/loki/

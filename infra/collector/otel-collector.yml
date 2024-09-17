@@ -1,0 +1,55 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: "job-offers-service"
+          scrape_interval: 5s
+          metrics_path: '/actuator/prometheus'
+          static_configs:
+            - targets: ["host.docker.internal:7010"]
+  otlp:
+    protocols:
+      grpc:
+        endpoint: otel-collector:4317
+      http:
+        endpoint: otel-collector:4318
+                
+processors:
+  # batch metrics before sending to reduce API usage
+  batch:
+    send_batch_size: 10000
+    send_batch_max_size: 11000
+    timeout: 10s
+
+exporters:
+  prometheus:
+    endpoint: otel-collector:8889 # localhost:8889/metrics
+  otlp:
+    endpoint: tempo:4317  # tempo container host and port
+    tls:
+      insecure: true
+  loki:
+    endpoint: "http://loki:3100/loki/api/v1/push"
+
+extensions:
+  # responsible for responding to health check calls on behalf of the collector.
+  health_check:
+  # fetches the collector's performance data
+  pprof:
+  # serves as an http endpoint that provides live debugging data about instrumented components.
+  zpages:
+
+service:
+  extensions: [health_check, pprof, zpages]
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [prometheus]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp]  # name here should match the exporter name for tempo which is otlp
+    logs:
+      receivers: [otlp]
+      exporters: [loki]

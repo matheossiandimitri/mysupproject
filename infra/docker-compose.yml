@@ -1,0 +1,99 @@
+version: '3'
+services:
+  # otel-collector: not very simple to group metrics + logs + traces with OTEL, TODO for later
+    # container_name: otel-collector
+    # image:  otel/opentelemetry-collector-contrib:0.109.0
+    # restart: always
+    # command:
+      # - --config=/etc/otelcol-cont/otel-collector.yml
+    # volumes:
+      # - ./collector/otel-collector.yml:/etc/otelcol-cont/otel-collector.yml
+    # ports:
+      # - "1888:1888" # pprof extension
+      # - "8888:8888" # OTEL /metrics (in prometheus format)
+      # - "8889:8889" # Prometheus exporter metrics
+      # - "13133:13133" # health_check extension
+      # - "4317:4317" # OTLP gRPC receiver
+      # - "4318:4318" # OTLP http receiver
+      # - "55679:55679" # zpages extension
+
+  postgresql:
+    container_name: postgresql
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: msp376340
+      POSTGRES_PASSWORD: "Yo73o=7pFo=n"
+      POSTGRES_DB: job_offers
+    ports:
+      - "5432:5432"
+    #volumes:
+    #  - "./<your_sql_file_name_here>.sql:/docker-entrypoint-initdb.d/1.sql"
+
+  eureka-server:
+    container_name: eureka-server
+    image: dim/eureka-server:0.0.1
+    restart: always
+    ports:
+      - "7300:7300"
+
+  # job-offers-service:
+    # container_name: job-offers-service
+    # image: dim/job-offers-service:0.0.1
+    # restart: always
+    # ports:
+      # - "7010:7010"
+    # depends_on:
+      # - eureka-server
+      # - postgresql
+
+  # contact-book-service:
+    # container_name: contact-book-service
+    # image: dim/contact-book-service:0.0.1
+    # restart: always
+    # ports:
+      # - "7050:7050"
+    # depends_on:
+      # - eureka-server
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.54.1
+    restart: always
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  tempo:
+    container_name: tempo
+    image: grafana/tempo:main-35da3b1
+    command: [ "-config.file=/etc/tempo.yml" ]
+    volumes:
+      - ./tempo/tempo.yml:/etc/tempo.yml
+      - ./tempo/tempo-data:/tmp/tempo
+    ports:
+      - "3110:3100" # Tempo HTTP
+      - "9411:9411" # Zipkin TCP
+      #- "4317"  # otlp grpc
+
+  loki:
+    container_name: loki
+    image: grafana/loki:3.2.0
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:11.2.0
+    volumes: # add data sources instead of doing it manually
+      - ./grafana/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
