@@ -1,3 +1,8 @@
+TODO
+	all instan
+	actuator
+
+
 Intellij
 	SonarLint
 
@@ -48,10 +53,39 @@ authorization-server: partie authentication
    <groupId>org.springframework.boot</groupId>
    <artifactId>spring-boot-starter-actuator</artifactId>
   </dependency>
-	
 
-prometheus
-grafana
+
+Metrics & tracing =============>	
+
+OpenTelemetry:
+	- observability framework
+	- collect distributed traces & metrics
+	- When to scale ? https://opentelemetry.io/docs/collector/scaling/
+		 "looking at the metrics otelcol_exporter_queue_size and otelcol_exporter_queue_capacity"
+	- otel-collector when running (via docker compose) without service
+
+Prometheus:
+	- time-series database for metrics and a robust querying tool
+	- 1 server can handle million of time-series, enough for 1000 servers
+	- https://www.robustperception.io/scaling-and-federating-prometheus/?ref=blog.ippon.fr
+	
+Grafana: http://localhost:3000/login admin/admin (first login) -> admin/root
+	Grafana offer customizable dashboards to monitor different metrics
+
+Alerting ? Prometheus or Grafana ?
+
+Grafana Tempo:
+	- Tracing backend => where the request goes, from client to db or other services
+	- works with OpenTelemetry
+
+Grafana Loki :
+	Log aggregation system
+	https://grafana.com/oss/loki/
+
+Maven Dependency:
+	Tracing Context Propagation: io.micrometer:micrometer-tracing-bridge-brave
+	Latency Visualization: io.zipkin.reporter2:zipkin-reporter-brave
+	
 
 
 Later:
