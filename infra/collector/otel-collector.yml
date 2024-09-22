@@ -1,16 +1,21 @@
 receivers:
   otlp:
     protocols:
-      http:
       grpc:
-
+        endpoint: otel-collector:4317
+      http:
+        endpoint: otel-collector:4318
+                
 processors:
   # batch metrics before sending to reduce API usage
   batch:
+    send_batch_size: 10000
+    send_batch_max_size: 11000
+    timeout: 10s
 
 exporters:
   prometheus:
-    endpoint: "0.0.0.0:8889"
+    endpoint: "0.0.0.0:8889" #otel-collector:8889
     const_labels:
       label1: spring
   otlp:

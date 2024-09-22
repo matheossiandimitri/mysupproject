@@ -2,7 +2,7 @@ version: '3'
 services:
   otel-collector:
     container_name: otel-collector
-    image: otel/opentelemetry-collector:0.109.0
+    image:  otel/opentelemetry-collector-contrib:0.109.0
     restart: always
     command:
       - --config=/etc/otelcol-cont/otel-collector.yml
@@ -16,6 +16,7 @@ services:
       - "4317:4317" # OTLP gRPC receiver
       - "4318:4318" # OTLP http receiver
       - "55679:55679" # zpages extension
+
 
   prometheus:
     container_name: prometheus
@@ -41,5 +42,11 @@ services:
   grafana:
     container_name: grafana
     image: grafana/grafana:11.2.0
+    volumes: # add data sources instead of doing it manually
+      - ./grafana/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
     ports:
       - "3000:3000"
